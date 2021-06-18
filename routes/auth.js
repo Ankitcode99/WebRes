@@ -7,6 +7,9 @@ const bcrypt = require('bcrypt')
 const users = [{username:"AnkitCode99",password:"21"},{username:"HKool01",password:"19"},
 {username:"VatsalKul",password:"21"}]
 
+router.get('/',(req,res)=>{
+    res.send('Working In Progress!!!')
+});
 /***
  * @swagger
  * /test:
@@ -47,16 +50,32 @@ router.get('/test',(req,res)=>{
  *          401:
  *              description: Unauthorized
  */
-router.post('/login',(req,res)=>{
-    const newUser = {
-        username:req.body.username,
-        age:req.body.age
+router.post('/login',async (req,res)=>{
+    for(let i=0;i<users.length;i++)
+    {
+        if(users[i].username==req.body.username)
+        {
+            let pwd = req.body.password;
+            try{
+                if(await bcrypt.compare(pwd,users[i].password)){
+                    res.status(200).json({
+                        msg:"Login Successful"
+                    })
+                }
+                else{
+                    res.status(401).json({
+                        msg:"Invalid Credentials"
+                    })
+                }    
+            }
+            catch(err){
+                console.error(err)
+            }
+        }
     }
-    console.log(`Request Body ${newUser.username}`)
-    users.push(newUser);
-    res.status(201).json({
-        msg:"User LoggedIn Successfully"
-    })
+    res.status(401).json({
+        msg:"Username does not exist"
+    });
 })
 
 /**
