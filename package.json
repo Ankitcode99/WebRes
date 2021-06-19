@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Ankitcode99/WebRes#readme",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
