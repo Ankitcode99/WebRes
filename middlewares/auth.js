@@ -12,7 +12,9 @@ module.exports = {
     ensureAuth: function(req,res,next){
         const token = req.header('auth-token');
         if(!token){
-            res.status(401).send("We don't know you")
+            res.status(401).json({
+                msg:"Unauthorized"
+            })
         }
 
         try{
@@ -20,7 +22,9 @@ module.exports = {
             req.user = verified
             next()
         }catch(err){
-            res.status(403).send("We know you but you're missing something")
+            res.status(403).json({
+                msg:"Access Denied"
+            })
         }
     }
 }

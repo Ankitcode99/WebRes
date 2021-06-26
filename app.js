@@ -7,10 +7,16 @@ const swaggerJsDocs = require('swagger-jsdoc');
 const swaggerUI  =require('swagger-ui-express');
 const PORT = process.env.PORT || 5000;
 const connect = require('./db')
-
-
+const bp = require('body-parser')
+const path = require('path')
 const app = express();
 connect();
+
+app.set("view engine","ejs");
+app.use(bp.urlencoded({extended:false}));
+app.use(bp.json());
+
+app.use(express.static(path.join(__dirname,'public')))
 
 const swaggerOptions = {
     swaggerDefinition:{
@@ -33,6 +39,5 @@ app.use(helmet());
 
 app.use('/',require('./routes/auth'));
 app.use('/user',require('./routes/user'));
-app.use('/api',require('./routes/api'));
 
 app.listen(PORT,()=>console.log(`Server started on PORT=${PORT}`));

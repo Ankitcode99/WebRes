@@ -10,13 +10,19 @@ const AuthModel = require('../models/AuthModel');
 
 const users=[{username:"AnkitCode99",age:21},{username:"HKool1",age:19},{username:"VatsalKul",age:21}];
 
-const schema = Joi.object({
+const SignUpSchema = Joi.object({
+    email:Joi.string().required(),
     username:Joi.string().min(6).required(),
     password:Joi.string().min(6).required()
 });
 
+const LoginSchema = Joi.object({
+   username:Joi.string().min(6).required(),
+    password:Joi.string().min(6).required()
+});
+
 router.get('/',(req,res)=>{
-    res.send('Working In Progress!!!')
+    res.render('register')
 });
 /***
  * @swagger
@@ -65,9 +71,11 @@ router.get('/test',ensureAuth,(req,res)=>{
  *              description: Unauthorized
  */
 router.post('/login',ensureGuest,async (req,res)=>{
-    const {error} = schema.validate(req.body);
+    const {error} = LoginSchema.validate(req.body);
     if(error) 
-        res.status(400).send(error.details[0].message)
+        res.status(400).json({
+            msg:error.details[0].message
+        })
     else{
         const user = await AuthUser.findOne({username:req.body.username});
         if(!user){
@@ -80,12 +88,8 @@ router.post('/login',ensureGuest,async (req,res)=>{
             if(validPass){
 
                 const token = jwt.sign({_id:user._id,username:user.username},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3600s'})
-                const refresh = jwt.sign({_id:user._id,username:user.username},process.env.REFRESH_TOKEN_SECRET)
-                res.header('auth-token',token).header('refresh-token',refresh).status(200).json({
-                    msg:"LoggedIn Successfully",
-                    accesstoken:token,
-                    refreshtoken:refresh
-                })
+                const refresh = jwt.sign({_id:user._id,username:user.username},process.env.REFRESH_TOKEN_SECRET,{expiresIn:'1y'})
+                res.status(200).redirect('/user/dashboard')
                 
             }
             else{
@@ -109,6 +113,9 @@ router.post('/login',ensureGuest,async (req,res)=>{
  *                  schema:
  *                      type: object               
  *                      properties:
+ *                          email:
+ *                              type: string
+ *                              default: string
  *                          username:
  *                              type: string
  *                              default: TestUser
@@ -124,15 +131,17 @@ router.post('/login',ensureGuest,async (req,res)=>{
  *              description: Username already exist in database
  */
 router.post('/signup',ensureGuest,async (req,res)=>{
-
-    const {error} = schema.validate(req.body);
+    const {error} = SignUpSchema.validate(req.body);
     if(error) 
-        res.status(400).send(error.details[0].message)
+        res.status(400).json({
+            msg:error.details[0].message
+        })
     else{
         let pwd = req.body.password;
         
         const encpwd = await bcrypt.hash(pwd,10);
         const user = new AuthUser({
+            email:req.body.email,
             username:req.body.username,
             password:encpwd
         })
@@ -141,18 +150,16 @@ router.post('/signup',ensureGuest,async (req,res)=>{
             const exist = await AuthUser.findOne({ username:req.body.username });
             if(!exist){
                 await AuthUser.create(user)
-                res.status(201).json({
-                    msg:"User Created Successfully"
-                })
+                const token = jwt.sign({_id:user._id,username:user.username},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3600s'})
+                const refresh = jwt.sign({_id:user._id,username:user.username},process.env.REFRESH_TOKEN_SECRET,{expiresIn:'1y'})
+                res.status(201).redirect('/user/dashboard')
             }
             else{
-                res.status(409).json({
-                    msg:"Username Already Taken!"
-                });
+                res.status(409).redirect('/')
             }
         }
         catch(err){
-            res.status(400).send(err);
+            res.status(400).redirect('/')
         }
     }
 })

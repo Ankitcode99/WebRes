@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WebRes</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@1,200&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="content">
+            <div class="slider-wrapper">
+              WebRes - Showcase your
+              <div class="slider">
+                  <div class="slider-text1">skills</div>
+                  <div class="slider-text2">achievements</div>
+                  <div class="slider-text3">projects</div>
+                  <div class="slider-text4">etc.</div>
+              </div>
+            </div>       
+          </div>
+        <div class="login-wrap">
+            <div class="login-html">
+                <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+                <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+                <div class="login-form">
+                    <form class="sign-in-htm" action="/login" method="POST">
+                        <div class="group">
+                            <label for="user" class="label">Username</label>
+                            <input id="user" type="text" class="input" name="username">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Password</label>
+                            <input id="pass" type="password" class="input" data-type="string" name="password">
+                        </div>
+                        <br>
+                        <div class="group">
+                            <input type="submit" class="button" value="Sign In">
+                        </div>
+                        <hr>
+                        <div class="foot-lnk">
+                            <a href="#forgot">Forgot Password?</a>
+                        </div>
+                    </form>
+                    <form class="sign-up-htm" action="/signup" method="POST">
+                        <div class="group">
+                            <label for="email" class="label">Email</label>
+                            <input id="useremail" type="text" class="input" name="email">
+                        </div>
+                        <div class="group">
+                            <label for="username" class="label">Username</label>
+                            <input id="username" type="text" class="input" data-type="string" name="username">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Password</label>
+                            <input id="pass" type="password" class="input" data-type="string" name="password">
+                        </div>
+                        <br>
+                        <div class="group">
+                            <input type="submit" class="button" value="Sign Up">
+                        </div>
+                        <hr>
+                        <div class="foot-lnk">
+                            <label for="tab-1">Already Member?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

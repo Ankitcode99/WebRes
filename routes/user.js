@@ -3,8 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose')
 const {ensureAuth,ensureGuest} = require('../middlewares/auth');
 
-router.get('/',(req,res)=>{
-    res.send("WebRes is Up!")
+router.get('/dashboard',(req,res)=>{
+    res.render("dashboard")
 })
 
 module.exports = router;
